@@ -23,18 +23,22 @@ function https_serve() {
       fi
       case `uname` in
         Darwin)
-          https_serve_MIME="/usr/local/etc/nginx/mime.types"
-          https_serve_EVENT="kqueue"
-          https_serve_USER_DIRECTIVE=""
+          local https_serve_MIME="/usr/local/etc/nginx/mime.types"
+          local https_serve_EVENT="kqueue"
+          local https_serve_USER_DIRECTIVE=""
           ;;
         *)
-          https_serve_MIME="/etc/nginx/mime.types"
-          https_serve_EVENT="epoll"
-          https_serve_USER_DIRECTIVE="user nobody nobody; "
+          local https_serve_MIME="/etc/nginx/mime.types"
+          local https_serve_EVENT="epoll"
+          local https_serve_USER_DIRECTIVE="user nobody nobody; "
           ;;
       esac
 
       echo "
+${https_serve_USER_DIRECTIVE}
+pid $https_serve_DIR.nginx.pid;
+worker_processes 2;
+
 events {
   worker_connections 1024;
   use $https_serve_EVENT;
@@ -76,7 +80,7 @@ http {
 
       echo $https_serve_PASSWORD | htpasswd -i -c $https_serve_DIR.htpasswd $https_serve_USERNAME
 
-      nginx -c $https_serve_DIR.nginx.conf -g "${https_serve_USER_DIRECTIVE}pid $https_serve_DIR.nginx.pid; worker_processes 2;" || return $?
+      nginx -c $https_serve_DIR.nginx.conf || return $?
 
       for https_serve_ADDRESS in `ifconfig | grep 'inet ' | sed -e "s/inet /|/" | sed -e "s/ netmask/|/" | cut -f 2 -d '|'`
       do
