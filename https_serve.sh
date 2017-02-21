@@ -82,7 +82,7 @@ http {
 
       nginx -c $https_serve_DIR.nginx.conf || return $?
 
-      for https_serve_ADDRESS in `ifconfig | grep 'inet ' | sed -e "s/inet /|/" | sed -e "s/ netmask/|/" | cut -f 2 -d '|'`
+      for https_serve_ADDRESS in `ifconfig | grep 'inet ' | sed -e "s/inet /|/" -e "s/ netmask/|/" | cut -f 2 -d '|'`
       do
         echo "https://$https_serve_USERNAME:$https_serve_PASSWORD@$https_serve_ADDRESS:$https_serve_PORT/"
       done
