@@ -11,11 +11,11 @@ function any2ico() {
       return 2
       ;;
   esac
-  which convert 1>/dev/null 2>/dev/null
+  which convert &>/dev/null
   if [ $? -gt 0 ]; then
     port install imagemagick
   fi
-  which png2ico 1>/dev/null 2>/dev/null
+  which png2ico &>/dev/null
   if [ $? -gt 0 ]; then
     port install png2ico
   fi
