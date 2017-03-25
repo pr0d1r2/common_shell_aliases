@@ -12,7 +12,7 @@ function renice_loop() {
       renice_loop_INTERVAL=$INTERVAL
       ;;
   esac
-  while do
+  while true; do
     for renice_loop_PROCESS_NAME in $@
     do
       NICE="$renice_loop_LEVEL" renice_named $renice_loop_PROCESS_NAME
