@@ -7,7 +7,7 @@ function renice_named() {
   esac
   sudo echo -n
   parallel \
-    "ps -ax | pgrep {} | cut -b1-5 | parallel -I '<>' 'sudo renice $renice_named_LEVEL <>'" \
+    "ps -ax | pgrep {} | parallel -I '<>' 'sudo renice $renice_named_LEVEL <>'" \
     ::: \
     "$@" 2>/dev/null
   return $?
