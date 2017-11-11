@@ -1,4 +1,12 @@
 function screen_with_env_detached_named() {
+  if [ -z "$1" ]; then
+    echo "Please give name as first parameter !!!"
+    return 1
+  fi
+  if [ -z "$2" ]; then
+    echo "No command given (second parameter and more) !!!"
+    return 2
+  fi
   local screen_with_env_detached_named_PROFILE
   local screen_with_env_detached_named_WRAPPER
   case $(basename "$SHELL") in
@@ -11,7 +19,7 @@ function screen_with_env_detached_named() {
   esac
   if [ ! -e "$screen_with_env_detached_named_PROFILE" ]; then
     echo "No $screen_with_env_detached_named_PROFILE file !!!"
-    return 1
+    return 11
   fi
   screen_with_env_detached_named_WRAPPER="/tmp/.screen_with_env_detached_named-$$-$(echo "$@" | md5sum).sh"
   echo "#!$SHELL

@@ -1,4 +1,8 @@
 function screen_with_env() {
+  if [ -z "$1" ]; then
+    echo "No command given (first parameter and more) !!!"
+    return 1
+  fi
   local screen_with_env_PROFILE
   local screen_with_env_WRAPPER
   case $(basename "$SHELL") in
@@ -11,7 +15,7 @@ function screen_with_env() {
   esac
   if [ ! -e "$screen_with_env_PROFILE" ]; then
     echo "No $screen_with_env_PROFILE file !!!"
-    return 1
+    return 11
   fi
   screen_with_env_WRAPPER="/tmp/.screen_with_env-$$-$(echo "$@" | md5sum).sh"
   echo "#!$SHELL
