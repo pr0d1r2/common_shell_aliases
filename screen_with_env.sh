@@ -1,5 +1,6 @@
 function screen_with_env() {
   local screen_with_env_PROFILE
+  local screen_with_env_WRAPPER
   case $(basename "$SHELL") in
     zsh)
       screen_with_env_PROFILE="$HOME/.zshrc"
@@ -12,6 +13,7 @@ function screen_with_env() {
     echo "No $screen_with_env_PROFILE file !!!"
     return 1
   fi
+  screen_with_env_WRAPPER="/tmp/.screen_with_env-$$-$(echo "$@" | md5sum).sh"
   echo "#!$SHELL
     source $screen_with_env_PROFILE
     # shellcheck disable=SC2145
@@ -19,7 +21,7 @@ function screen_with_env() {
     echo
     echo 'Press ENTER to leave from shell.'
     read X
-  " > /tmp/.screen_with_env-$$.sh
-  chmod 700 /tmp/.screen_with_env-$$.sh
-  screen /tmp/.screen_with_env-$$.sh
+  " > "$screen_with_env_WRAPPER"
+  chmod 700 "$screen_with_env_WRAPPER"
+  screen "$screen_with_env_WRAPPER"
 }
