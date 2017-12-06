@@ -13,7 +13,7 @@ function until_success() {
   esac
   case $ATTEMPTS in
     "")
-      until_success_ATTEMPTS=10
+      until_success_ATTEMPTS=0
       ;;
     [1-9] | [1-9][0-9] | [1-9][0-9][0-9] | [1-9][0-9][0-9][0-9])
       until_success_ATTEMPTS=$ATTEMPTS

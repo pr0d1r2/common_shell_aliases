@@ -14,7 +14,7 @@ function until_failure() {
   esac
   case $ATTEMPTS in
     "")
-      until_failure_ATTEMPTS=10
+      until_failure_ATTEMPTS=0
       ;;
     [1-9] | [1-9][0-9] | [1-9][0-9][0-9] | [1-9][0-9][0-9][0-9])
       until_failure_ATTEMPTS="$ATTEMPTS"
