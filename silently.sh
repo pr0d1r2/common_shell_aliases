@@ -1,6 +1,8 @@
 function silently() {
   local silently_STATUS
-  local silently_LOG="/tmp/.silently-$$-$(echo $@ | md5sum | cut -f 1 -d ' ').log"
+  local silently_LOG
+  silently_LOG="/tmp/.silently-$$-$(echo "$@" | md5sum | cut -f 1 -d ' ').log"
+  # shellcheck disable=SC2068
   $@ &> "$silently_LOG"
   silently_STATUS=$?
   if [ $silently_STATUS -gt 0 ]; then

@@ -1,3 +1,3 @@
 function todo() {
-  echo "TODO: $@"
+  echo "TODO: $*"
 }
