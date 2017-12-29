@@ -18,13 +18,14 @@ function rsync_mtime() {
   chmod go-rwxs $rsync_mtime_LIST
 
   # directories (mandatory '/' at end to avoid double send)
-  ssh -p $rsync_mtime_PORT \
-      $rsync_mtime_REMOTE \
+  # shellcheck disable=SC2029
+  ssh -p "$rsync_mtime_PORT" \
+      "$rsync_mtime_REMOTE" \
       "cd $rsync_mtime_PATH_REMOTE ; find -mtime -$rsync_mtime_MTIME -maxdepth 1 -type d -exec echo {} \;" | \
     grep -v "^.$" | \
     cut -b3- > $rsync_mtime_LIST
 
-  while read rsync_mtime_FILE
+  while read -r rsync_mtime_FILE
   do
     rsync -s \
           --progress -av \
@@ -34,13 +35,14 @@ function rsync_mtime() {
   done < $rsync_mtime_LIST
 
   # files (no '/' at end)
-  ssh -p $rsync_mtime_PORT \
-      $rsync_mtime_REMOTE \
+  # shellcheck disable=SC2029
+  ssh -p "$rsync_mtime_PORT" \
+      "$rsync_mtime_REMOTE" \
       "cd $rsync_mtime_PATH_REMOTE ; find -mtime -$rsync_mtime_MTIME -maxdepth 1 -type f -exec echo {} \;" | \
     grep -v "^.$" | \
-    cut -b3- > $rsync_mtime_LIST
+    cut -b3- > "$rsync_mtime_LIST"
 
-  while read rsync_mtime_FILE
+  while read -r rsync_mtime_FILE
   do
     rsync -s \
           --progress -av \
@@ -49,5 +51,5 @@ function rsync_mtime() {
           "$rsync_mtime_PATH_LOCAL/$rsync_mtime_FILE"
   done < $rsync_mtime_LIST
 
-  rm -f $rsync_mtime_LIST
+  rm -f "$rsync_mtime_LIST"
 }
