@@ -9,19 +9,19 @@ function https_serve() {
       local https_serve_PORT=8472
       ;;
   esac
-  for https_serve_DIR in $@
+  for https_serve_DIR in "$@"
   do
-    if [ -d $https_serve_DIR ]; then
-      https_serve_DIR=`pwd -P`
-      if [ ! -f $https_serve_DIR.crt ]; then
-        openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout $https_serve_DIR.key -out $https_serve_DIR.crt
+    if [ -d "$https_serve_DIR" ]; then
+      https_serve_DIR=$(pwd -P)
+      if [ ! -f "$https_serve_DIR.crt" ]; then
+        openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout "$https_serve_DIR.key" -out "$https_serve_DIR.crt"
       fi
-      if [ -f $https_serve_DIR.nginx.pid ]; then
-        kill `cat $https_serve_DIR.nginx.pid`
-        rm -f $https_serve_DIR.nginx.pid
+      if [ -f "$https_serve_DIR.nginx.pid" ]; then
+        kill "$(cat "$https_serve_DIR.nginx.pid")"
+        rm -f "$https_serve_DIR.nginx.pid"
         sleep 2
       fi
-      case `uname` in
+      case $(uname) in
         Darwin)
           local https_serve_MIME="/usr/local/etc/nginx/mime.types"
           local https_serve_EVENT="kqueue"
@@ -72,17 +72,19 @@ http {
     }
   }
 }
-" > $https_serve_DIR.nginx.conf
-      nginx -t -c $https_serve_DIR.nginx.conf || return $?
+" > "$https_serve_DIR.nginx.conf"
+      nginx -t -c "$https_serve_DIR.nginx.conf" || return $?
 
-      local https_serve_USERNAME=`pwgen 64 1`
-      local https_serve_PASSWORD=`pwgen 64 1`
+      local https_serve_USERNAME
+      local https_serve_PASSWORD
+      https_serve_USERNAME=$(pwgen 64 1)
+      https_serve_PASSWORD=$(pwgen 64 1)
 
-      echo $https_serve_PASSWORD | htpasswd -i -c $https_serve_DIR.htpasswd $https_serve_USERNAME
+      echo "$https_serve_PASSWORD" | htpasswd -i -c "$https_serve_DIR.htpasswd" "$https_serve_USERNAME"
 
-      nginx -c $https_serve_DIR.nginx.conf || return $?
+      nginx -c "$https_serve_DIR.nginx.conf" || return $?
 
-      for https_serve_ADDRESS in `ifconfig | grep 'inet ' | sed -e "s/inet /|/" -e "s/ netmask/|/" | cut -f 2 -d '|'`
+      for https_serve_ADDRESS in $(ifconfig | grep 'inet ' | sed -e "s/inet /|/" -e "s/ netmask/|/" | cut -f 2 -d '|')
       do
         echo "https://$https_serve_USERNAME:$https_serve_PASSWORD@$https_serve_ADDRESS:$https_serve_PORT/"
       done
