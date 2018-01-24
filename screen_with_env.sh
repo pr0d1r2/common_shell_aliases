@@ -21,7 +21,9 @@ function screen_with_env() {
   echo "#!$SHELL
     source $screen_with_env_PROFILE
     # shellcheck disable=SC2145
-    $@
+    $*
+    echo
+    date
     echo
     echo 'Press ENTER to leave from shell.'
     read X

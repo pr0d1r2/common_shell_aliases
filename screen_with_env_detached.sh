@@ -20,7 +20,9 @@ function screen_with_env_detached() {
   screen_with_env_detached_WRAPPER="/tmp/.screen_with_env_detached-$$-$(echo "$@" | md5sum).sh"
   echo "#!$SHELL
     source $screen_with_env_detached_PROFILE
-    $@
+    $*
+    echo
+    date
     echo
     echo 'Press ENTER to leave from shell.'
     read X
