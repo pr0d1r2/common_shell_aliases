@@ -24,16 +24,17 @@ function until_success() {
   until_success_ATTEMPT=1
   while [ $until_success_ERR -gt 0 ]; do
     echo "until_success: run #$until_success_RUN ($(date))"
+    # shellcheck disable=SC2068
     $@
     until_success_ERR=$?
     if [ $until_success_ERR -gt 0 ]; then
       sleep "$until_success_SLEEP"
-      until_success_RUN=$(( $until_success_RUN + 1 ))
+      until_success_RUN=$(( until_success_RUN + 1 ))
     fi
     if [ "$until_success_ATTEMPTS" -eq "$until_success_ATTEMPT" ]; then
       return 1
     fi
-    until_success_ATTEMPT=$(( $until_success_ATTEMPT + 1 ))
+    until_success_ATTEMPT=$(( until_success_ATTEMPT + 1 ))
   done
   echo "until_success: SUCCESS: run #$until_success_RUN ($(date))"
 }
