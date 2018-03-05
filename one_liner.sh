@@ -1,3 +1,3 @@
 function one_liner() {
-  echo $@ | tr "\n" ' '
+  echo "$@" | tr "\n" ' '
 }
