@@ -11,8 +11,8 @@ function any2ico() {
       return 2
       ;;
   esac
-  which convert &>/dev/null || brew install imagemagick
-  which png2ico &>/dev/null || brew install png2ico
+  command -v convert &>/dev/null || brew install imagemagick
+  command -v png2ico &>/dev/null || brew install png2ico
   convert "$1" -colors 256 /tmp/any2ico.png && png2ico "$2 "/tmp/any2ico.png
   rm -f "/tmp/any2ico.png"
 }

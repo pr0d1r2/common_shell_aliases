@@ -4,5 +4,5 @@
 #   parallel_fork_bomb_stop
 function parallel_fork_bomb_stop() {
   # shellcheck disable=SC2009
-  ps -ax | grep "$(which parallel)" | cut -b1-5 | xargs kill
+  ps -ax | grep "$(command -v parallel)" | cut -b1-5 | xargs kill
 }
