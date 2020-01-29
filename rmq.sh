@@ -8,7 +8,7 @@
 function rmq() {
   parallel \
     "mv {} {}-deleting-$$ && screen -d -m -S {}-deleting-$$ rm -rf {}-deleting-$$" \
-    :::
+    ::: \
     "$@"
   return $?
 }
