@@ -21,7 +21,7 @@ function screen_with_env_detached_named() {
     echo "No $screen_with_env_detached_named_PROFILE file !!!"
     return 11
   fi
-  screen_with_env_detached_named_WRAPPER="/tmp/.screen_with_env_detached_named-$$-$(echo "$@" | md5sum).sh"
+  screen_with_env_detached_named_WRAPPER="$(mktemp_executable)"
   echo "#!$SHELL
     source $screen_with_env_detached_named_PROFILE
     ${*:2}
@@ -31,6 +31,5 @@ function screen_with_env_detached_named() {
     echo 'Press ENTER to leave from shell.'
     read X
   " > "$screen_with_env_detached_named_WRAPPER"
-  chmod 700 "$screen_with_env_detached_named_WRAPPER"
-  screen -S "$1" -d -m "$screen_with_env_detached_named_WRAPPER"
+  screen -S "$1" -d -m "$screen_with_env_detached_named_WRAPPER ; rm -f $screen_with_env_detached_named_WRAPPER"
 }
