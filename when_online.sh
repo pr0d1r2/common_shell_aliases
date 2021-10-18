@@ -12,6 +12,16 @@ function when_online() {
       when_online_SLEEP="$SLEEP"
       ;;
   esac
-  SLEEP="$when_online_SLEEP" until_success ping -c 1 8.8.8.8 && "$@"
+  local when_online_ADDRESS
+  case "$ADDRESS" in
+    "")
+      when_online_ADDRESS="8.8.8.8"
+      ;;
+    *.*)
+      when_online_ADDRESS="$ADDRESS"
+      ;;
+  esac
+
+  SLEEP="$when_online_SLEEP" until_success ping -c 1 "$when_online_ADDRESS" && "$@"
   return $?
 }
