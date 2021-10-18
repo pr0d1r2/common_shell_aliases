@@ -1,2 +1,2 @@
-UID="$(id -u)
+UID="$(id -u)"
 export UID
