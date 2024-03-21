@@ -1,3 +1,3 @@
 function uf() {
-  SLEEP=0 until_failure $@ || return $?
+  SLEEP=1 until_failure $@ || return $?
 }

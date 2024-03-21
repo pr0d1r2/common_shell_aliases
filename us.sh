@@ -1,3 +1,3 @@
 function us() {
-  SLEEP=0 until_success $@ || return $?
+  SLEEP=1 until_success $@ || return $?
 }
