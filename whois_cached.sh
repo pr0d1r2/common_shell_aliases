@@ -1,11 +1,15 @@
 function whois_cached() {
-  test -z "$2"
-
   if [ -d "$HOME/Library/Caches/" ]; then
-    test -d "$HOME/Library/Caches/whois" || mkdir -p "$HOME/Library/Caches/whois"
-    test -e "$HOME/Library/Caches/whois/$1" || whois "$1" > "$HOME/Library/Caches/whois/$1" || rm "$HOME/Library/Caches/whois/$1"
+    local whois_cached_PARAM
+    local whois_cached_CACHE
+    for whois_cached_PARAM in $@
+    do
+      test -d "$HOME/Library/Caches/whois" || mkdir -p "$HOME/Library/Caches/whois"
 
-    cat "$HOME/Library/Caches/whois/$1" || return 102
+      whois_cached_CACHE="$HOME/Library/Caches/whois/$whois_cached_PARAM"
+      test -e "$whois_cached_CACHE" || whois "$whois_cached_PARAM" > "$whois_cached_CACHE" || rm "$whois_cached_CACHE"
+      cat "$whois_cached_CACHE" || return 102
+    done
   else
     echo "Add supported cache path !!!"
     return 101
